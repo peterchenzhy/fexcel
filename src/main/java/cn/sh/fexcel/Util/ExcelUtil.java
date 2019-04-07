@@ -47,7 +47,7 @@ public class ExcelUtil {
             return EMPTY;
         }
         if (path.contains(POINT)) {
-            String filename =  path.substring(0, path.lastIndexOf(POINT) );
+            String filename = path.substring(0, path.lastIndexOf(POINT));
             log.info(filename);
             return filename;
         }
@@ -92,7 +92,7 @@ public class ExcelUtil {
     public static String getXValue(XSSFCell xssfCell) {
         if (xssfCell.getCellType() == CellType.BOOLEAN) {
             return String.valueOf(xssfCell.getBooleanCellValue());
-        } else if (xssfCell.getCellType() == CellType.NUMERIC) {
+        } else if (xssfCell.getCellType() == CellType.NUMERIC || xssfCell.getCellType() == CellType.FORMULA) {
             String cellValue = "";
             if (XSSFDateUtil.isCellDateFormatted(xssfCell)) {
                 Date date = XSSFDateUtil.getJavaDate(xssfCell.getNumericCellValue());
