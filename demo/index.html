@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1 minimum-scale=1" />
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.export.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.columnsresize.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.export.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxfileupload.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="js/demo.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
+</head>
+
+<body style="width: 800px; margin: auto;padding: 10px;">
+    <div id="pnl_file" style="height: auto">
+        <div style="float: left;">
+            <span style="margin-right:10px; float: left; margin-top: 10px;">选择文件</span>
+            <div id="ddl_filelist" style="float: left;"></div>
+        </div>
+        <div style="margin-left: 500px;">
+            <input id="btn_upload" type="button" value="上传文件" />
+        </div>
+    </div>
+    <div id="pnl_filter" style="height: 30px; margin-top: 10px;">
+        <div style="float: left;">
+            <span style="margin-right:5px;">搜索条件A=</span><input id="ipt_condition_one" type="text" />
+            <span style="margin-right:5px;">搜索条件B=</span><input id="ipt_condition_two" type="text" />
+        </div>
+        <div style="float: right;">
+            <input id="btn_search" type="button" value="查询" />
+            <input id="btn_submit" type="button" value="提交" />
+            <input id="btn_export" type="button" value="导出" />
+        </div>
+    </div>
+    <div id="grd_data">
+
+    </div>
+</body>
+
+</html>
