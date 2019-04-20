@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import java.util.Map;
 @Slf4j
 public class DBTableService {
 
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -43,22 +43,24 @@ public class DBTableService {
      * @version v1
      * @since 2019/4/20 10:05
      */
-    public boolean createTable(String tableName, List<String> tableHeader, List<ArrayList<String>> excelHeader) {
+    public boolean createTable(String tableName, List<String> tableHeader, List<ArrayList<String>> excelHeader,String excelName) {
 
         if (tableHeader == null || StringUtils.isEmpty(tableName) || tableHeader.size() == 0) {
             log.warn("传入的数据为空，无法生成table");
             return false;
         }
         try {
+            //删表
             jdbcTemplate.execute(TableSqlGenatorUtil.dropTable(tableName));
         } catch (Exception e) {
             log.error(e.getCause().getMessage());
         }
         try {
+            //无效表记录
             jdbcTemplate.execute(TableSqlGenatorUtil.invalidTableExcelTable(tableName));
             jdbcTemplate.execute(TableSqlGenatorUtil.createTable(tableName, tableHeader));
-            jdbcTemplate.execute(TableSqlGenatorUtil.insertExcelTable(tableName));
-            jdbcTemplate.batchUpdate(TableSqlGenatorUtil.insertExcelTableCollum(tableName, excelHeader).toArray(new String[]{}));
+            jdbcTemplate.execute(TableSqlGenatorUtil.insertExcelTable(tableName,excelName));
+            jdbcTemplate.batchUpdate(TableSqlGenatorUtil.insertExcelTableCollum(tableName, excelHeader,tableHeader).toArray(new String[]{}));
             log.info("建表{}成功", tableName);
         } catch (Exception e) {
             log.error(e.getCause().getMessage());
@@ -134,5 +136,6 @@ public class DBTableService {
         List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.querySearchTable(tableName));
         return poMap;
     }
+
 
 }

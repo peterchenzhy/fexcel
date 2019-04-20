@@ -23,7 +23,8 @@ public class ExcelTableCollumPo {
 
     private Long tableId;
 
-    private String collumName;
+    private String tableCollumName;
+    private String excelCollumName;
 
     private Date createTime;
 
@@ -39,7 +40,8 @@ public class ExcelTableCollumPo {
         ExcelTableCollumPo po = new ExcelTableCollumPo();
         po.setId((Long) map.get("id"));
         po.setTableId((Long) map.get("table_id"));
-        po.setCollumName((String) map.get("collum_name"));
+        po.setTableCollumName((String) map.get("table_collum_name"));
+        po.setExcelCollumName((String) map.get("excel_collum_name"));
         po.setCreateTime((Date) map.get("create_time"));
         po.setStatus((Integer) map.get("status"));
         return po;

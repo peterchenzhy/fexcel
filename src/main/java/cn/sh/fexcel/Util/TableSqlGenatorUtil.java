@@ -32,7 +32,7 @@ public class TableSqlGenatorUtil {
         stringBuffer.append("(");
         stringBuffer.append("id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id'").append(COMMA);
         for (int i = 0; i < headers.size(); i++) {
-            stringBuffer.append(headers.get(i).trim()).append(TAB).append("varchar(50) NOT NULL DEFAULT ''");
+            stringBuffer.append(headers.get(i).trim()).append(TAB).append("varchar(100) NOT NULL DEFAULT ''");
             stringBuffer.append(COMMA);
         }
         stringBuffer.append("PRIMARY KEY (id)");
@@ -88,14 +88,14 @@ public class TableSqlGenatorUtil {
         List<String> list = new ArrayList<>();
         String template = insertTemplate(tableName, headers);
         for (List<String> e : data) {
-           String str =  JSON.toJSONString(e);
+            String str = JSON.toJSONString(e);
             list.add(String.format(template, e.toArray()));
         }
         return list;
     }
 
-    public static String insertExcelTable(String tableName) {
-        String sql = String.format(INSERT_EXCEL_TABLE_TEMPLATE, tableName, StatusEnum.有效.getCode());
+    public static String insertExcelTable(String tableName, String excelName) {
+        String sql = String.format(INSERT_EXCEL_TABLE_TEMPLATE, tableName, excelName, StatusEnum.有效.getCode());
         log.info(sql);
         return sql;
     }
@@ -103,17 +103,17 @@ public class TableSqlGenatorUtil {
 
     //    public final static String INSERT_EXCEL_TABLE_COLLUM_TEMPLATE = "insert into excel_table_collum (table_id,collum_name,status) " +
 //            "select et.id,'%s','%s' from excel_table et where et.table_name = '%s'";
-    public static List<String> insertExcelTableCollum(String tableName, List<ArrayList<String>> headers) {
-        if (headers == null && headers.isEmpty()) {
+    public static List<String> insertExcelTableCollum(String tableName, List<ArrayList<String>> excelHeader, List<String> tableHeader) {
+        if (excelHeader == null && excelHeader.isEmpty()) {
             return Lists.newArrayList();
         }
-        List<String> collums = headers.get(0);
+        List<String> collums = excelHeader.get(0);
         List<String> list = new ArrayList<>(collums.size());
-        collums.stream().forEach(collum -> {
-            String sql = String.format(INSERT_EXCEL_TABLE_COLLUM_TEMPLATE, collum, StatusEnum.有效.getCode(), tableName);
+        for (int i = 0; i < collums.size(); i++) {
+            String sql = String.format(INSERT_EXCEL_TABLE_COLLUM_TEMPLATE, collums.get(i), tableHeader.get(i), StatusEnum.有效.getCode(), tableName);
             log.info(sql);
             list.add(sql);
-        });
+        }
 
         return list;
     }

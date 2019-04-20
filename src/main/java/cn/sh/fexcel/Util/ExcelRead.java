@@ -108,8 +108,6 @@ public class ExcelRead {
                     XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                     if (xssfRow != null) {
                         rowList = new ArrayList<String>();
-//                        totalCells = xssfRow.getLastCellNum();
-                        //读取列，从第一列开始
                         for (int c = 0; c < totalCells ; c++) {
                             XSSFCell cell = xssfRow.getCell(c);
                             if (cell == null) {
@@ -302,4 +300,5 @@ public class ExcelRead {
         }
         return null;
     }
+
 }

@@ -3,10 +3,13 @@ package cn.sh.fexcel.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.joda.time.DateTime;
+import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -44,20 +47,24 @@ public class ExcelUtil {
      * @param path
      * @return
      */
-    public static String fileName(String path) {
+    public static String fileName(String path, boolean tableFormat) {
         if (path == null || EMPTY.equals(path.trim())) {
             return EMPTY;
         }
+        String filename;
         if (path.contains(POINT)) {
-            String filename = path.substring(0, path.lastIndexOf(POINT));
-            //空格转换为_
-            filename = filename.replaceAll(commons.TAB, commons.CROSS);
-            filename = filename.replaceAll(commons.POINT, commons.CROSS);
-            log.info(filename);
+            filename = path.substring(0, path.lastIndexOf(POINT));
+            if (tableFormat) {
+                //空格转换为_
+                filename = filename.replaceAll(commons.TAB, EMPTY);
+                filename = filename.replaceAll(commons.POINT, EMPTY);
+                log.info(filename);
+            }
             return filename;
         }
         return EMPTY;
     }
+
 
     /**
      * 单元格格式
@@ -91,34 +98,33 @@ public class ExcelUtil {
     /**
      * 单元格格式
      *
-     * @param xssfCell
      * @return
      */
-    public static String getXValue(XSSFCell xssfCell) {
-
+    public static String getXValue(XSSFCell cell) {
         DataFormatter df = new DataFormatter();
-        return df.formatCellValue(xssfCell);
-//        if (xssfCell.getCellType() == CellType.BOOLEAN) {
-//            return String.valueOf(xssfCell.getBooleanCellValue());
-//        } else if (xssfCell.getCellType() == CellType.NUMERIC || xssfCell.getCellType() == CellType.FORMULA) {
-//            String cellValue = "";
-//
-//
-//            if (XSSFDateUtil.isCellDateFormatted(xssfCell)) {
-//                Date date = XSSFDateUtil.getJavaDate(xssfCell.getNumericCellValue());
-//                cellValue = sdf.format(date);
-//            } else {
-//                DecimalFormat df = new DecimalFormat("#.##");
-//                cellValue = df.format(xssfCell.getNumericCellValue());
-//                String strArr = cellValue.substring(cellValue.lastIndexOf(POINT) + 1, cellValue.length());
-//                if (strArr.equals("00")) {
-//                    cellValue = cellValue.substring(0, cellValue.lastIndexOf(POINT));
-//                }
-//            }
-//            return cellValue;
-//        } else {
-//            return String.valueOf(xssfCell.getStringCellValue());
-//        }
+        if (cell != null && CellType.NUMERIC.equals(cell.getCellType()) && DateUtil.isCellDateFormatted(cell)) {
+
+            log.warn(cell.getCellStyle().getDataFormatString());
+            log.warn(String.valueOf(cell.getCellStyle().getDataFormat()));
+
+
+            return new DateTime(cell.getDateCellValue().getTime()).toString("yyyy/MM/dd HH:mm:ss");
+        }
+        String cellValue;
+        if (cell.getCellType().equals(CellType.STRING)) {
+            cellValue = cell.getStringCellValue();
+        } else if (cell.getCellType().equals(CellType.FORMULA)) {
+            cellValue = "="+cell.getCellFormula();
+        } else {
+            cellValue = df.formatCellValue(cell);
+            log.info(" cellValue= df.formatCellValue(cell) ==" + cellValue);
+        }
+        // 单元格函数处理
+//        cellValue = df.formatCellValue(cell, new XSSFFormulaEvaluator((XSSFWorkbook) row.getSheet().getWorkbook()));
+
+        //excel中特殊空格字符，会导致无法trim函数无法去除
+//        cellValue = cellValue.replaceAll("\\u00A0", "");
+        return StringUtils.trimWhitespace(cellValue);
     }
 
     /**

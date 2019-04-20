@@ -27,7 +27,7 @@ public class ExcelWrite {
 // 设置表头
         List<String> headList = new ArrayList<String>();
         headers.stream().forEach(header -> {
-            headList.add(header.getCollumName().trim());
+            headList.add(header.getTableCollumName().trim());
         });
 
         SXSSFWorkbook  workbook = new SXSSFWorkbook();
@@ -43,7 +43,7 @@ public class ExcelWrite {
         for (int i = 0; i < data.size(); i++) {
             SXSSFRow row = sheet.createRow(rowNum);
             for (int j = 0; j < headers.size(); j++) {
-                row.createCell(j).setCellValue(data.get(i).get(headers.get(j).getCollumName()).toString());
+                row.createCell(j).setCellValue(data.get(i).get(headers.get(j).getTableCollumName()).toString());
             }
             rowNum++;
         }
