@@ -15,7 +15,9 @@ import lombok.Getter;
 public class commons {
 
     public final static String TAB = " ";
+    public final static String CROSS = "_";
     public final static String COMMA = ",";
+    public final static String POINT = "\\.";
     public final static String PARAM = "%s";
     public final static String INSERT_EXCEL_TABLE_TEMPLATE = "insert into excel_table (table_name,status) values('%s','%s')";
     public final static String QUERY_EXCEL_TABLE_TEMPLATE = "select * from  excel_table where table_name ='%s' and status = 1";

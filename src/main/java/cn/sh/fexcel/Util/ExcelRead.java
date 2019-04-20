@@ -41,9 +41,9 @@ public class ExcelRead {
         } else {
             String postfix = ExcelUtil.getPostfix(file.getOriginalFilename());
             if (!ExcelUtil.EMPTY.equals(postfix)) {
-                if (ExcelUtil.OFFICE_EXCEL_2003_POSTFIX.equals(postfix)) {
+                if (ExcelUtil.OFFICE_EXCEL_2003_POSTFIX.equalsIgnoreCase(postfix)) {
                     return readXls(file);
-                } else if (ExcelUtil.OFFICE_EXCEL_2010_POSTFIX.equals(postfix)) {
+                } else if (ExcelUtil.OFFICE_EXCEL_2010_POSTFIX.equalsIgnoreCase(postfix)) {
                     return readXlsx(file);
                 } else {
                     return null;
@@ -66,9 +66,9 @@ public class ExcelRead {
         } else {
             String postfix = ExcelUtil.getPostfix(file.getOriginalFilename());
             if (!ExcelUtil.EMPTY.equals(postfix)) {
-                if (ExcelUtil.OFFICE_EXCEL_2003_POSTFIX.equals(postfix)) {
+                if (ExcelUtil.OFFICE_EXCEL_2003_POSTFIX.equalsIgnoreCase(postfix)) {
                     return readXlsHeader(file);
-                } else if (ExcelUtil.OFFICE_EXCEL_2010_POSTFIX.equals(postfix)) {
+                } else if (ExcelUtil.OFFICE_EXCEL_2010_POSTFIX.equalsIgnoreCase(postfix)) {
                     return readXlsxHeader(file);
                 } else {
                     return null;
@@ -108,7 +108,7 @@ public class ExcelRead {
                     XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                     if (xssfRow != null) {
                         rowList = new ArrayList<String>();
-                        totalCells = xssfRow.getLastCellNum();
+//                        totalCells = xssfRow.getLastCellNum();
                         //读取列，从第一列开始
                         for (int c = 0; c < totalCells ; c++) {
                             XSSFCell cell = xssfRow.getCell(c);

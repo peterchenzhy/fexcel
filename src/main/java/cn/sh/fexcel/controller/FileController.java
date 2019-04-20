@@ -1,8 +1,10 @@
 package cn.sh.fexcel.controller;
 
 import cn.sh.fexcel.Util.ExcelUtil;
+import cn.sh.fexcel.Util.commons;
 import cn.sh.fexcel.service.DBTableService;
 import cn.sh.fexcel.service.FileService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,16 +50,22 @@ public class FileController {
         //文件名
         String fileName = ExcelUtil.fileName(file.getOriginalFilename().trim());
         //文件头
-        List headers = fileService.readExcelHeader(file);
+        List<ArrayList<String>> excelHeader = fileService.readExcelHeader(file);
         //查询表是否存在
         if (dbTableService.checkTableExist(fileName)) {
 
         }
 
+        //生成数据库列名8
+        List<String> tableHeader = new ArrayList<>(excelHeader.size());
+        for(int i = 0 ;i<excelHeader.get(0).size(); i++){
+            tableHeader.add("c"+i);
+        }
+
         //建表
-        if (dbTableService.createTable(fileName, headers)) {
+        if (dbTableService.createTable(fileName, tableHeader ,excelHeader)) {
             //插入数据
-            dbTableService.batchInsertData(fileName, fileService.readExcel(file), headers);
+            dbTableService.batchInsertData(fileName, fileService.readExcel(file), tableHeader);
         }
         return null;
     }

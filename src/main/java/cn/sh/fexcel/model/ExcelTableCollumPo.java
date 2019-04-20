@@ -22,11 +22,18 @@ public class ExcelTableCollumPo {
     private Long id;
 
     private Long tableId;
+
     private String collumName;
 
     private Date createTime;
 
     private Integer status;
+
+    private Date updateTime ;
+    private Integer canEdit;
+    private Integer canView;
+    private Integer canSearch;
+
 
     public static ExcelTableCollumPo map2po(Map<String, Object> map) {
         ExcelTableCollumPo po = new ExcelTableCollumPo();

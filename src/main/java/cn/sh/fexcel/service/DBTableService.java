@@ -33,16 +33,19 @@ public class DBTableService {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * 根据excel表头生成sql
+     * 建表
      *
-     * @param headers
+     * @param tableName   表名
+     * @param tableHeader 数据库表头
+     * @param excelHeader excel表头
      * @author PeterChen
      * @modifier PeterChen
-     * @since 2019/4/6 12:01
+     * @version v1
+     * @since 2019/4/20 10:05
      */
-    public boolean createTable(String tableName, List<List<String>> headers) {
+    public boolean createTable(String tableName, List<String> tableHeader, List<ArrayList<String>> excelHeader) {
 
-        if (headers == null || StringUtils.isEmpty(tableName) || headers.size() == 0) {
+        if (tableHeader == null || StringUtils.isEmpty(tableName) || tableHeader.size() == 0) {
             log.warn("传入的数据为空，无法生成table");
             return false;
         }
@@ -53,9 +56,9 @@ public class DBTableService {
         }
         try {
             jdbcTemplate.execute(TableSqlGenatorUtil.invalidTableExcelTable(tableName));
-            jdbcTemplate.execute(TableSqlGenatorUtil.createTable(tableName, headers));
+            jdbcTemplate.execute(TableSqlGenatorUtil.createTable(tableName, tableHeader));
             jdbcTemplate.execute(TableSqlGenatorUtil.insertExcelTable(tableName));
-            jdbcTemplate.batchUpdate(TableSqlGenatorUtil.insertExcelTableCollum(tableName, headers).toArray(new String[]{}));
+            jdbcTemplate.batchUpdate(TableSqlGenatorUtil.insertExcelTableCollum(tableName, excelHeader).toArray(new String[]{}));
             log.info("建表{}成功", tableName);
         } catch (Exception e) {
             log.error(e.getCause().getMessage());
@@ -75,7 +78,7 @@ public class DBTableService {
      * @version v1
      * @since 2019/4/6 13:39
      */
-    public void batchInsertData(String fileName, List<ArrayList<String>> data, List headers) {
+    public void batchInsertData(String fileName, List<ArrayList<String>> data,List<String> headers) {
         List<String> sqls = TableSqlGenatorUtil.insertSQL(fileName, data, headers);
         List<List<String>> partList = Lists.partition(sqls, commons.BATCH_500);
         partList.stream().forEach(list -> {

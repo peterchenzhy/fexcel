@@ -1,5 +1,6 @@
 package cn.sh.fexcel.Util;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -22,8 +23,7 @@ import static cn.sh.fexcel.Util.commons.*;
 @Slf4j
 public class TableSqlGenatorUtil {
 
-
-    public static String createTable(String tableName, List<List<String>> headers) {
+    public static String createTable(String tableName, List<String> headers) {
         if (headers == null || StringUtils.isEmpty(tableName) || headers.size() == 0) {
             log.warn("传入的数据为空，无法生成table");
             return "";
@@ -31,8 +31,8 @@ public class TableSqlGenatorUtil {
         StringBuffer stringBuffer = new StringBuffer("create table").append(TAB).append(tableName);
         stringBuffer.append("(");
         stringBuffer.append("id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id'").append(COMMA);
-        for (int i = 0; i < headers.get(0).size(); i++) {
-            stringBuffer.append(headers.get(0).get(i).trim()).append(TAB).append("varchar(20) NOT NULL DEFAULT ''");
+        for (int i = 0; i < headers.size(); i++) {
+            stringBuffer.append(headers.get(i).trim()).append(TAB).append("varchar(50) NOT NULL DEFAULT ''");
             stringBuffer.append(COMMA);
         }
         stringBuffer.append("PRIMARY KEY (id)");
@@ -61,21 +61,21 @@ public class TableSqlGenatorUtil {
      * @version v1
      * @since 2019/4/6 13:48
      */
-    public static String insertTemplate(String tableName, List<ArrayList<String>> headers) {
+    public static String insertTemplate(String tableName, List<String> headers) {
         StringBuilder sb = new StringBuilder();
         sb.append("insert into").append(TAB).append(tableName);
         sb.append("(");
-        for (int i = 0; i < headers.get(0).size(); i++) {
-            sb.append(headers.get(0).get(i).trim());
-            if (i != headers.get(0).size() - 1) {
+        for (int i = 0; i < headers.size(); i++) {
+            sb.append(headers.get(i).trim());
+            if (i != headers.size() - 1) {
                 sb.append(COMMA);
             }
         }
         sb.append(")");
         sb.append("values(");
-        for (int i = 0; i < headers.get(0).size(); i++) {
+        for (int i = 0; i < headers.size(); i++) {
             sb.append("'").append(PARAM).append("'");
-            if (i != headers.get(0).size() - 1) {
+            if (i != headers.size() - 1) {
                 sb.append(COMMA);
             }
         }
@@ -84,10 +84,11 @@ public class TableSqlGenatorUtil {
         return sb.toString();
     }
 
-    public static List<String> insertSQL(String tableName, List<ArrayList<String>> data, List<ArrayList<String>> headers) {
+    public static List<String> insertSQL(String tableName, List<ArrayList<String>> data, List<String> headers) {
         List<String> list = new ArrayList<>();
         String template = insertTemplate(tableName, headers);
         for (List<String> e : data) {
+           String str =  JSON.toJSONString(e);
             list.add(String.format(template, e.toArray()));
         }
         return list;
@@ -102,7 +103,7 @@ public class TableSqlGenatorUtil {
 
     //    public final static String INSERT_EXCEL_TABLE_COLLUM_TEMPLATE = "insert into excel_table_collum (table_id,collum_name,status) " +
 //            "select et.id,'%s','%s' from excel_table et where et.table_name = '%s'";
-    public static List<String> insertExcelTableCollum(String tableName, List<List<String>> headers) {
+    public static List<String> insertExcelTableCollum(String tableName, List<ArrayList<String>> headers) {
         if (headers == null && headers.isEmpty()) {
             return Lists.newArrayList();
         }

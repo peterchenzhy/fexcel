@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 
@@ -38,6 +39,7 @@ public class ExcelUtil {
 
     /**
      * 获得path的后缀名
+     * 空格转换为_
      *
      * @param path
      * @return
@@ -48,6 +50,9 @@ public class ExcelUtil {
         }
         if (path.contains(POINT)) {
             String filename = path.substring(0, path.lastIndexOf(POINT));
+            //空格转换为_
+            filename = filename.replaceAll(commons.TAB, commons.CROSS);
+            filename = filename.replaceAll(commons.POINT, commons.CROSS);
             log.info(filename);
             return filename;
         }
@@ -90,25 +95,30 @@ public class ExcelUtil {
      * @return
      */
     public static String getXValue(XSSFCell xssfCell) {
-        if (xssfCell.getCellType() == CellType.BOOLEAN) {
-            return String.valueOf(xssfCell.getBooleanCellValue());
-        } else if (xssfCell.getCellType() == CellType.NUMERIC || xssfCell.getCellType() == CellType.FORMULA) {
-            String cellValue = "";
-            if (XSSFDateUtil.isCellDateFormatted(xssfCell)) {
-                Date date = XSSFDateUtil.getJavaDate(xssfCell.getNumericCellValue());
-                cellValue = sdf.format(date);
-            } else {
-                DecimalFormat df = new DecimalFormat("#.##");
-                cellValue = df.format(xssfCell.getNumericCellValue());
-                String strArr = cellValue.substring(cellValue.lastIndexOf(POINT) + 1, cellValue.length());
-                if (strArr.equals("00")) {
-                    cellValue = cellValue.substring(0, cellValue.lastIndexOf(POINT));
-                }
-            }
-            return cellValue;
-        } else {
-            return String.valueOf(xssfCell.getStringCellValue());
-        }
+
+        DataFormatter df = new DataFormatter();
+        return df.formatCellValue(xssfCell);
+//        if (xssfCell.getCellType() == CellType.BOOLEAN) {
+//            return String.valueOf(xssfCell.getBooleanCellValue());
+//        } else if (xssfCell.getCellType() == CellType.NUMERIC || xssfCell.getCellType() == CellType.FORMULA) {
+//            String cellValue = "";
+//
+//
+//            if (XSSFDateUtil.isCellDateFormatted(xssfCell)) {
+//                Date date = XSSFDateUtil.getJavaDate(xssfCell.getNumericCellValue());
+//                cellValue = sdf.format(date);
+//            } else {
+//                DecimalFormat df = new DecimalFormat("#.##");
+//                cellValue = df.format(xssfCell.getNumericCellValue());
+//                String strArr = cellValue.substring(cellValue.lastIndexOf(POINT) + 1, cellValue.length());
+//                if (strArr.equals("00")) {
+//                    cellValue = cellValue.substring(0, cellValue.lastIndexOf(POINT));
+//                }
+//            }
+//            return cellValue;
+//        } else {
+//            return String.valueOf(xssfCell.getStringCellValue());
+//        }
     }
 
     /**

@@ -34,7 +34,6 @@ public class FileService {
     private DBTableService dbTableService;
 
     public List<ArrayList<String>> readExcel(MultipartFile file) {
-
         try {
             return new ExcelRead().readExcel(file);
         } catch (IOException e) {
