@@ -29,8 +29,10 @@ public class commons {
     public final static String INSERT_EXCEL_TABLE_COLLUM_TEMPLATE = "insert into excel_table_collum (table_id,excel_collum_name,table_collum_name,status) " +
             "select et.id,'%s','%s','%s' from excel_table et where et.table_name = '%s' and et.status =1 ";
 
-    public final static String QUERY_SEARCH_TABLE_TEMPLATE = "select * from  %s where 1=1 order by id ";
+    public final static String QUERY_EXPORT_TABLE_DATA_TEMPLATE = "select * from  %s where 1=1 order by id ";
     public final  static String GET_DATA_COUNT_TEMPLATE = "select count(*) as count from %s ";
+
+    public final  static String BATCH_UPDATE_DATA = "update %s set %s where id = %s ";
 
     public static final int BATCH_500 = 500;
 

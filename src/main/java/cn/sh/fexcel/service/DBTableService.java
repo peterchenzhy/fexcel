@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -154,8 +153,8 @@ public class DBTableService {
     }
 
 
-    public List<Map<String, Object>> querySearchTable(String tableName) {
-        List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.querySearchTable(tableName));
+    public List<Map<String, Object>> queryExportData(String tableName) {
+        List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.queryExportData(tableName));
         return poMap;
     }
 

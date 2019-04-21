@@ -1,7 +1,6 @@
 package cn.sh.fexcel.service;
 
 import cn.sh.fexcel.Util.ExcelRead;
-import cn.sh.fexcel.Util.ExcelUtil;
 import cn.sh.fexcel.Util.ExcelWrite;
 import cn.sh.fexcel.model.ExcelTableCollumPo;
 import cn.sh.fexcel.model.ExcelTablePo;
@@ -85,7 +84,7 @@ public class FileService {
             log.warn("数据表不存在 {}", tableName);
             return;
         }
-        List<Map<String, Object>> mapList = dataService.queryData(tableName);
+        List<Map<String, Object>> mapList = dataService.queryExportData(tableName);
         if (mapList != null && !mapList.isEmpty()) {
             List<ExcelTableCollumPo> headers = dbTableService.getExcelTableHeaders(tableName);
             Workbook workbook = ExcelWrite.write(headers, mapList);

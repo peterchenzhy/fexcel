@@ -7,6 +7,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static cn.sh.fexcel.Util.commons.*;
 
@@ -130,11 +132,29 @@ public class TableSqlGenatorUtil {
         return String.format(QUERY_EXCEL_TABLE_COLLUM_TEMPLATE, tableName);
     }
 
-    public static String querySearchTable(String tableName) {
-        return String.format(QUERY_SEARCH_TABLE_TEMPLATE, tableName);
+    public static String queryExportData(String tableName) {
+        return String.format(QUERY_EXPORT_TABLE_DATA_TEMPLATE, tableName);
     }
 
-    public static String  getDataCount(String tableName) {
+    public static String getDataCount(String tableName) {
         return String.format(GET_DATA_COUNT_TEMPLATE, tableName);
+    }
+
+
+    //update %s set %s where id = %s
+    public static String updateData(String tableName, Map<String, String> map) {
+        StringBuilder sb = new StringBuilder();
+        String id = "-1";
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            if (k.equalsIgnoreCase("id")) {
+                id = v.trim();
+            } else {
+                sb.append(k.trim()).append("=").append("'").append(v.trim()).append("'").append(COMMA);
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return String.format(BATCH_UPDATE_DATA, tableName, sb.toString(), id);
     }
 }
