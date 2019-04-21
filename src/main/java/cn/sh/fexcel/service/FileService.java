@@ -34,6 +34,16 @@ public class FileService {
     @Autowired
     private DBTableService dbTableService;
 
+    /**
+     * 读文件
+     *
+     * @param file
+     * @param startRow
+     * @author PeterChen
+     * @modifier PeterChen
+     * @version v1
+     * @since 2019/4/21 11:11
+     */
     public List<ArrayList<String>> readExcel(MultipartFile file, Integer startRow) {
         try {
             return new ExcelRead().readExcel(file, startRow);
@@ -44,16 +54,34 @@ public class FileService {
         }
     }
 
+    /**
+     * 读文件头
+     *
+     * @param file
+     * @author PeterChen
+     * @modifier PeterChen
+     * @version v1
+     * @since 2019/4/21 11:10
+     */
     public List<ArrayList<String>> readExcelHeader(MultipartFile file) {
         return readExcel(file, 0);
     }
 
-
+    /**
+     * 导出
+     *
+     * @param fileName
+     * @param response
+     * @author PeterChen
+     * @modifier PeterChen
+     * @version v1
+     * @since 2019/4/21 11:10
+     */
     public void export(String fileName, HttpServletResponse response) {
 
-        String tableName = ExcelUtil.fileName(fileName, true,false);
+        String tableName = ExcelUtil.fileName(fileName, true, false);
         if (!dbTableService.checkTableExist(tableName)) {
-            log.warn("数据表不存在 {}" ,tableName);
+            log.warn("数据表不存在 {}", tableName);
             return;
         }
         List<Map<String, Object>> mapList = dataService.queryData(tableName);

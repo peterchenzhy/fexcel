@@ -43,10 +43,18 @@ public class ExcelWrite {
         for (int i = 0; i < data.size(); i++) {
             SXSSFRow row = sheet.createRow(rowNum);
             for (int j = 0; j < headers.size(); j++) {
-                row.createCell(j).setCellValue(data.get(i).get(headers.get(j).getTableCollumName()).toString());
+                String cellValue = data.get(i).get(headers.get(j).getTableCollumName()).toString();
+                //公式处理
+                if (cellValue.contains("=")) {
+                    cellValue= cellValue.substring(cellValue.indexOf("=")+1);
+                    row.createCell(j).setCellFormula(cellValue);
+                }else {
+                    row.createCell(j).setCellValue(cellValue);
+                }
             }
             rowNum++;
         }
+        sheet.setForceFormulaRecalculation(true);
         return workbook;
 
     }

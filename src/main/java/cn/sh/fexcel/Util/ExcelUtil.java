@@ -101,11 +101,8 @@ public class ExcelUtil {
     public static String getXValue(XSSFCell cell) {
         DataFormatter df = new DataFormatter();
         if (cell != null && CellType.NUMERIC.equals(cell.getCellType()) && DateUtil.isCellDateFormatted(cell)) {
-
-            log.warn(cell.getCellStyle().getDataFormatString());
-            log.warn(String.valueOf(cell.getCellStyle().getDataFormat()));
-
-
+//            log.warn(cell.getCellStyle().getDataFormatString());
+//            log.warn(String.valueOf(cell.getCellStyle().getDataFormat()));
             return new DateTime(cell.getDateCellValue().getTime()).toString("yyyy/MM/dd HH:mm:ss");
         }
         String cellValue;
@@ -115,13 +112,16 @@ public class ExcelUtil {
             cellValue = "=" + cell.getCellFormula();
         } else {
             cellValue = df.formatCellValue(cell);
-            log.info(" cellValue= df.formatCellValue(cell) ==" + cellValue);
+//            log.info(" cellValue= df.formatCellValue(cell) ==" + cellValue);
         }
         // 单元格函数处理
 //        cellValue = df.formatCellValue(cell, new XSSFFormulaEvaluator((XSSFWorkbook) row.getSheet().getWorkbook()));
 
         //excel中特殊空格字符，会导致无法trim函数无法去除
-//        cellValue = cellValue.replaceAll("\\u00A0", "");
+        cellValue = cellValue.replaceAll("\\u00A0", "");
+        if(cellValue.contains("'")){
+            cellValue = cellValue.replaceAll("'","\\\\'");
+        }
         return StringUtils.trimWhitespace(cellValue);
     }
 
