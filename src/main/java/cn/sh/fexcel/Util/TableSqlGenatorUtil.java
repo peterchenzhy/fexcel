@@ -136,10 +136,23 @@ public class TableSqlGenatorUtil {
         return String.format(QUERY_EXPORT_TABLE_DATA_TEMPLATE, tableName);
     }
 
+    public static String querySearchTable(String tableName) {
+        return String.format(QUERY_SEARCH_TABLE_TEMPLATE, tableName);
+    }
+
+    public static String querySearchTable(String tableName, String clause, int pageNo, int pageSize) {
+        int startIndex = (pageNo - 1) * pageSize;
+        int endIndex = startIndex + pageSize;
+        return String.format(QUERY_SEARCH_TABLE_WITH_CONDITIONS_TEMPLATE, tableName, clause, startIndex, endIndex);
+    }
+
     public static String getDataCount(String tableName) {
         return String.format(GET_DATA_COUNT_TEMPLATE, tableName);
     }
 
+    public static String getDataCount(String tableName, String conditions) {
+        return String.format(GET_DATA_COUNT_WITH_CONDITIONS_TEMPLATE, tableName, conditions);
+    }
 
     //update %s set %s where id = %s
     public static String updateData(String tableName, Map<String, String> map) {

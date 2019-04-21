@@ -1,5 +1,7 @@
 package cn.sh.fexcel.controller;
 
+import cn.sh.fexcel.model.DataQueryPo;
+import cn.sh.fexcel.model.DataResponsePo;
 import cn.sh.fexcel.service.DataService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -21,6 +23,7 @@ import java.util.Map;
  * @since 2019-04-06 19:22
  */
 @RestController
+@CrossOrigin(origins = "*",maxAge = 3600)
 public class DataController {
 
     @Autowired
@@ -31,8 +34,13 @@ public class DataController {
         return dataService.batchCommit(tableName, data);
     }
 
+    @RequestMapping(value = "/queryData",method = RequestMethod.POST)
+    public DataResponsePo queryData(@RequestBody DataQueryPo query){
+        DataResponsePo result=dataService.queryData(query);
+        return result;
+    }
 
-    public static void main(String... aa) {
+public static void main(String... aa) {
         Map<String, String> map = new HashMap<>();
         map.put("id", "id1");
         map.put("collum1", "A1");
