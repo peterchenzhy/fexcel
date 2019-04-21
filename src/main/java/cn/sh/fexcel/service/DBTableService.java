@@ -131,6 +131,28 @@ public class DBTableService {
         return null;
     }
 
+    /**
+     * 已导入的文件列表
+     *
+     * @param
+     * @return
+     * @author PeterChen
+     * @modifier PeterChen
+     * @version v1
+     * @since 2019/4/21 14:17
+     */
+    public List<ExcelTablePo> getFileList() {
+        List<Map<String, Object>> poMap = jdbcTemplate.queryForList(commons.QUERY_EXCEL_FILELIST_TEMPLATE);
+        if (poMap != null && poMap.size() > 0) {
+            List<ExcelTablePo> poList = new ArrayList<>(poMap.size());
+            poMap.stream().forEach(map -> {
+                poList.add(ExcelTablePo.map2po(map));
+            });
+            return poList;
+        }
+        return null;
+    }
+
 
     public List<Map<String, Object>> querySearchTable(String tableName) {
         List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.querySearchTable(tableName));

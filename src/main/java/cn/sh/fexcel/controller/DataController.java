@@ -1,6 +1,10 @@
 package cn.sh.fexcel.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.fastjson.JSON;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * DataController
@@ -13,4 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class DataController {
+
+    @RequestMapping(value = "/batchCommit",method = RequestMethod.POST)
+    public boolean batchCommit(@RequestParam("excelName") String excelName, @RequestBody Map<String ,String > map){
+        System.out.println(JSON.toJSONString(map));
+        System.out.println(excelName);
+        return true;
+    }
+
+    @RequestMapping(value = "/queryTable",method = RequestMethod.GET)
+    public List queryTable(@RequestParam("tableName") String excelName){
+        System.out.println(JSON.toJSONString(map));
+        System.out.println(excelName);
+        return true;
+    }
+
+
 }

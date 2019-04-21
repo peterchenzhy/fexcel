@@ -20,16 +20,11 @@ import java.util.Map;
 public class ExcelTableCollumPo {
 
     private Long id;
-
     private Long tableId;
-
     private String tableCollumName;
     private String excelCollumName;
-
     private Date createTime;
-
     private Integer status;
-
     private Date updateTime ;
     private Integer canEdit;
     private Integer canView;

@@ -76,14 +76,14 @@ public class FileController {
     /**
      * 导出
      *
-     * @param fileName
+     * @param tableName
      * @author PeterChen
      * @modifier PeterChen
      * @version v1
      * @since 2019/4/6 17:51
      */
     @RequestMapping(value = "/file/export", method = RequestMethod.GET)
-    public void fileUpload(@RequestParam(value = "fileName") String fileName, HttpServletResponse response) {
-        fileService.export(fileName, response);
+    public void fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
+        fileService.export(tableName, response);
     }
 }

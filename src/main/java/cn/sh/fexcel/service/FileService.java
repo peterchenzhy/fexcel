@@ -4,6 +4,7 @@ import cn.sh.fexcel.Util.ExcelRead;
 import cn.sh.fexcel.Util.ExcelUtil;
 import cn.sh.fexcel.Util.ExcelWrite;
 import cn.sh.fexcel.model.ExcelTableCollumPo;
+import cn.sh.fexcel.model.ExcelTablePo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,17 +71,17 @@ public class FileService {
     /**
      * 导出
      *
-     * @param fileName
+     * @param tableName
      * @param response
      * @author PeterChen
      * @modifier PeterChen
      * @version v1
      * @since 2019/4/21 11:10
      */
-    public void export(String fileName, HttpServletResponse response) {
+    public void export(String tableName, HttpServletResponse response) {
 
-        String tableName = ExcelUtil.fileName(fileName, true, false);
-        if (!dbTableService.checkTableExist(tableName)) {
+        List<ExcelTablePo> table = dbTableService.getExcelTable(tableName) ;
+        if (table==null||table.isEmpty()) {
             log.warn("数据表不存在 {}", tableName);
             return;
         }
@@ -91,14 +92,14 @@ public class FileService {
             try {
                 response.setContentType("application/octet-stream");
                 response.setHeader("Content-Disposition", "attachment;fileName="
-                        + new String((fileName + ".xlsx").getBytes("GB2312"), "ISO-8859-1"));
+                        + new String((table.get(0).getExcelName() + ".xlsx").getBytes("GB2312"), "ISO-8859-1"));
                 response.flushBuffer();
                 workbook.write(response.getOutputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            log.info("数据表{}没有数据。", fileName);
+            log.info("数据表{}没有数据。", table.get(0).getExcelName());
         }
 
     }
