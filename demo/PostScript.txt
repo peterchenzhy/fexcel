@@ -1,0 +1,50 @@
+function ajaxObject() {
+
+    var xmlHttp;
+
+    try {
+
+        // Firefox, Opera 8.0+, Safari
+        xmlHttp = new XMLHttpRequest();
+
+     }
+ 
+    catch (e) {
+
+        // Internet Explorer
+
+        try {
+
+                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+
+         } 
+         catch (e) {
+
+            try {
+
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+
+            } catch (e) {
+
+                alert("您的浏览器不支持AJAX！");
+
+                return false;
+
+            }
+
+        }
+
+    }
+
+    return xmlHttp;
+
+}
+
+var ajax = ajaxObject();
+
+ajax.open( "post" , 'http://localhost:8112/fexcel-server/queryData' , true );
+    
+ajax.setRequestHeader( "Content-Type" , "application/json; charset=utf-8" );
+    
+    
+ajax.send("{\"pageSize\":10,\"pageNo\":1,\"tableName\":\"extractedon1203eacsamplefollowupbyskulevelforps1\",\"condition\":{\"c1\":\"SYNC282975\",\"c4\":\"2154\"}}");
