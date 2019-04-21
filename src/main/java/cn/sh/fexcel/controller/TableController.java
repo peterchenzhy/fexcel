@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author PeterChen
  * @summary TableController
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description TableController
  * @since 2019-04-21 14:09
  */

@@ -8,7 +8,7 @@ import lombok.Getter;
  *
  * @author PeterChen
  * @summary commons
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description commons
  * @since 2019-04-06 13:45
  */

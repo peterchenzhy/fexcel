@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author PeterChen
  * @summary ExcelTablePo
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description ExcelTablePo
  * @since 2019-04-06 15:25
  */

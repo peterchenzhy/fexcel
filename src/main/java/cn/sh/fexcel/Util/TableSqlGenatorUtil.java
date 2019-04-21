@@ -16,7 +16,7 @@ import static cn.sh.fexcel.Util.commons.*;
  *
  * @author PeterChen
  * @summary TableSqlGenatorUtil
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description TableSqlGenatorUtil
  * @since 2019-04-04 10:11
  */

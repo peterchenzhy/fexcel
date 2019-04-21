@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author PeterChen
  * @summary FileService
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description FileService
  * @since 2019-04-06 11:10
  */

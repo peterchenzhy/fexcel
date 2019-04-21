@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author PeterChen
  * @summary FileController
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description FileController
  * @since 2019-04-04 10:14
  */

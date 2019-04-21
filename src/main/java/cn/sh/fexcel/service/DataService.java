@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author PeterChen
  * @summary DataService
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description DataService
  * @since 2019-04-06 19:23
  */

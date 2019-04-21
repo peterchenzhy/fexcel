@@ -17,7 +17,7 @@ import java.util.Map;
  *
  * @author PeterChen
  * @summary ExcelRead
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description ExcelRead
  * @since 2019-04-04 10:48
  */
