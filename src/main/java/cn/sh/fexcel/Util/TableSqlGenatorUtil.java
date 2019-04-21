@@ -133,4 +133,8 @@ public class TableSqlGenatorUtil {
     public static String querySearchTable(String tableName) {
         return String.format(QUERY_SEARCH_TABLE_TEMPLATE, tableName);
     }
+
+    public static String  getDataCount(String tableName) {
+        return String.format(GET_DATA_COUNT_TEMPLATE, tableName);
+    }
 }

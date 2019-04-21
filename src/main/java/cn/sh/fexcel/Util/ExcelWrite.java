@@ -23,20 +23,20 @@ import java.util.Map;
  */
 public class ExcelWrite {
 
-    public static Workbook write(String fileName, List<ExcelTableCollumPo> headers, List<Map<String, Object>> data) {
+    public static Workbook write(List<ExcelTableCollumPo> headers, List<Map<String, Object>> data) {
 // 设置表头
         List<String> headList = new ArrayList<String>();
         headers.stream().forEach(header -> {
-            headList.add(header.getTableCollumName().trim());
+            headList.add(header.getExcelCollumName().trim());
         });
 
-        SXSSFWorkbook  workbook = new SXSSFWorkbook();
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
         SXSSFSheet sheet = workbook.createSheet();
         createHead(workbook, sheet, headList);
 
         // 设置日期格式
         CellStyle style = workbook.createCellStyle();
-        style.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy h:mm"));
+//        style.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy h:mm"));
 
         // 新增数据行，并且设置单元格数据
         int rowNum = 1;
@@ -52,7 +52,7 @@ public class ExcelWrite {
     }
 
     // 创建表头
-    private static void createHead(SXSSFWorkbook  workbook, SXSSFSheet  sheet, List headList) {
+    private static void createHead(SXSSFWorkbook workbook, SXSSFSheet sheet, List headList) {
 
         SXSSFRow row = sheet.createRow(0);
         // 设置为居中加粗

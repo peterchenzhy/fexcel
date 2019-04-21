@@ -48,17 +48,17 @@ public class FileController {
             return "上传文件为空";
         }
         //文件名
-        String fileName = ExcelUtil.fileName(file.getOriginalFilename().trim(),false);
-        String tableName = ExcelUtil.fileName(file.getOriginalFilename().trim(),true);
-        int startRow = 1 ;
+        String fileName = ExcelUtil.fileName(file.getOriginalFilename().trim(), false,true);
+        String tableName = ExcelUtil.fileName(file.getOriginalFilename().trim(), true,true);
         //文件头
         List<ArrayList<String>> excelHeader = fileService.readExcelHeader(file);
         //查询表是否存在
         if (dbTableService.checkTableExist(tableName)) {
             List<ExcelTableCollumPo> collumList = dbTableService.getExcelTableHeaders(tableName);
-            List<String > tableHeader =collumList.stream().map(ExcelTableCollumPo::getTableCollumName).collect(Collectors.toList());
-            dbTableService.batchInsertData(tableName, fileService.readExcel(file), tableHeader);
-        }else {
+            List<String> tableHeader = collumList.stream().map(ExcelTableCollumPo::getTableCollumName).collect(Collectors.toList());
+            int startRow = dbTableService.getDataCount(tableName);
+            dbTableService.batchInsertData(tableName, fileService.readExcel(file, startRow + 1), tableHeader);
+        } else {
             //生成数据库列名
             List<String> tableHeader = new ArrayList<>(excelHeader.size());
             for (int i = 0; i < excelHeader.get(0).size(); i++) {
@@ -67,7 +67,7 @@ public class FileController {
             //建表
             if (dbTableService.createTable(tableName, tableHeader, excelHeader, fileName)) {
                 //插入数据
-                dbTableService.batchInsertData(tableName, fileService.readExcel(file), tableHeader);
+                dbTableService.batchInsertData(tableName, fileService.readExcel(file, 1), tableHeader);
             }
         }
         return null;
@@ -83,7 +83,7 @@ public class FileController {
      * @since 2019/4/6 17:51
      */
     @RequestMapping(value = "/file/export", method = RequestMethod.GET)
-    public void fileUpload(@RequestParam(value = "fileName")String fileName, HttpServletResponse response) {
-          fileService.export(fileName,response);
+    public void fileUpload(@RequestParam(value = "fileName") String fileName, HttpServletResponse response) {
+        fileService.export(fileName, response);
     }
 }

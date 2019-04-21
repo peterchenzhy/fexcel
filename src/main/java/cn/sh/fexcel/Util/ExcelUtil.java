@@ -3,7 +3,6 @@ package cn.sh.fexcel.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -35,7 +34,7 @@ public class ExcelUtil {
             return EMPTY;
         }
         if (path.contains(POINT)) {
-            return path.substring(path.lastIndexOf(POINT) + 1, path.length());
+            return path.substring(path.lastIndexOf(POINT) + 1);
         }
         return EMPTY;
     }
@@ -47,22 +46,21 @@ public class ExcelUtil {
      * @param path
      * @return
      */
-    public static String fileName(String path, boolean tableFormat) {
+    public static String fileName(String path, boolean tableFormat, boolean isUpload) {
         if (path == null || EMPTY.equals(path.trim())) {
             return EMPTY;
         }
-        String filename;
-        if (path.contains(POINT)) {
-            filename = path.substring(0, path.lastIndexOf(POINT));
-            if (tableFormat) {
-                //空格转换为_
-                filename = filename.replaceAll(commons.TAB, EMPTY);
-                filename = filename.replaceAll(commons.POINT, EMPTY);
-                log.info(filename);
-            }
-            return filename;
+        String filename = path;
+        if (path.contains(POINT) && isUpload) {
+            filename = filename.substring(0, path.lastIndexOf(POINT));
         }
-        return EMPTY;
+        if (tableFormat) {
+            //空格转换为_
+            filename = filename.replaceAll(commons.TAB, EMPTY);
+            filename = filename.replaceAll(commons.POINT, EMPTY);
+            log.info(filename);
+        }
+        return filename;
     }
 
 
@@ -114,7 +112,7 @@ public class ExcelUtil {
         if (cell.getCellType().equals(CellType.STRING)) {
             cellValue = cell.getStringCellValue();
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
-            cellValue = "="+cell.getCellFormula();
+            cellValue = "=" + cell.getCellFormula();
         } else {
             cellValue = df.formatCellValue(cell);
             log.info(" cellValue= df.formatCellValue(cell) ==" + cellValue);

@@ -43,7 +43,7 @@ public class DBTableService {
      * @version v1
      * @since 2019/4/20 10:05
      */
-    public boolean createTable(String tableName, List<String> tableHeader, List<ArrayList<String>> excelHeader,String excelName) {
+    public boolean createTable(String tableName, List<String> tableHeader, List<ArrayList<String>> excelHeader, String excelName) {
 
         if (tableHeader == null || StringUtils.isEmpty(tableName) || tableHeader.size() == 0) {
             log.warn("传入的数据为空，无法生成table");
@@ -59,8 +59,8 @@ public class DBTableService {
             //无效表记录
             jdbcTemplate.execute(TableSqlGenatorUtil.invalidTableExcelTable(tableName));
             jdbcTemplate.execute(TableSqlGenatorUtil.createTable(tableName, tableHeader));
-            jdbcTemplate.execute(TableSqlGenatorUtil.insertExcelTable(tableName,excelName));
-            jdbcTemplate.batchUpdate(TableSqlGenatorUtil.insertExcelTableCollum(tableName, excelHeader,tableHeader).toArray(new String[]{}));
+            jdbcTemplate.execute(TableSqlGenatorUtil.insertExcelTable(tableName, excelName));
+            jdbcTemplate.batchUpdate(TableSqlGenatorUtil.insertExcelTableCollum(tableName, excelHeader, tableHeader).toArray(new String[]{}));
             log.info("建表{}成功", tableName);
         } catch (Exception e) {
             log.error(e.getCause().getMessage());
@@ -70,7 +70,7 @@ public class DBTableService {
     }
 
     /**
-     * 更新数据
+     * 数据入库
      *
      * @param fileName
      * @param data
@@ -80,7 +80,7 @@ public class DBTableService {
      * @version v1
      * @since 2019/4/6 13:39
      */
-    public void batchInsertData(String fileName, List<ArrayList<String>> data,List<String> headers) {
+    public void batchInsertData(String fileName, List<ArrayList<String>> data, List<String> headers) {
         List<String> sqls = TableSqlGenatorUtil.insertSQL(fileName, data, headers);
         List<List<String>> partList = Lists.partition(sqls, commons.BATCH_500);
         partList.stream().forEach(list -> {
@@ -137,5 +137,9 @@ public class DBTableService {
         return poMap;
     }
 
+    public Integer getDataCount(String tableName) {
+        List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.getDataCount(tableName));
+        return Integer.valueOf(String.valueOf(poMap.get(0).get("count")));
+    }
 
 }

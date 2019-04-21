@@ -22,10 +22,7 @@ public class DataService {
     private DBTableService dbTableService;
 
     public List<Map<String, Object>> queryData(String fileName) {
-        if (dbTableService.checkTableExist(fileName)) {
-            List<Map<String, Object>> mapList = dbTableService.querySearchTable(fileName);
-            return mapList;
-        }
-        return null;
+        List<Map<String, Object>> mapList = dbTableService.querySearchTable(fileName);
+        return mapList;
     }
 }
