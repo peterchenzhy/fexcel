@@ -1,14 +1,12 @@
 package cn.sh.fexcel.controller;
 
 import cn.sh.fexcel.Util.ExcelUtil;
+import cn.sh.fexcel.model.BaseResponse;
 import cn.sh.fexcel.model.ExcelTableCollumPo;
 import cn.sh.fexcel.service.DBTableService;
 import cn.sh.fexcel.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +24,7 @@ import java.util.stream.Collectors;
  * @since 2019-04-04 10:14
  */
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class FileController {
 
     @Autowired
@@ -43,13 +42,13 @@ public class FileController {
      * @since 2019/4/6 17:51
      */
     @RequestMapping(value = "/file/upload", method = RequestMethod.POST)
-    public String fileUpload(@RequestParam(value = "excelFile") MultipartFile file) {
+    public BaseResponse fileUpload(@RequestParam(value = "excelFile") MultipartFile file) {
         if (file == null) {
-            return "上传文件为空";
+            BaseResponse.ResponseFacory.fail("上传的文件为空！");
         }
         //文件名
-        String fileName = ExcelUtil.fileName(file.getOriginalFilename().trim(), false,true);
-        String tableName = ExcelUtil.fileName(file.getOriginalFilename().trim(), true,true);
+        String fileName = ExcelUtil.fileName(file.getOriginalFilename().trim(), false, true);
+        String tableName = ExcelUtil.fileName(file.getOriginalFilename().trim(), true, true);
         //文件头
         List<ArrayList<String>> excelHeader = fileService.readExcelHeader(file);
         //查询表是否存在
@@ -70,7 +69,7 @@ public class FileController {
                 dbTableService.batchInsertData(tableName, fileService.readExcel(file, 1), tableHeader);
             }
         }
-        return null;
+        return BaseResponse.ResponseFacory.success(null);
     }
 
     /**
@@ -83,7 +82,8 @@ public class FileController {
      * @since 2019/4/6 17:51
      */
     @RequestMapping(value = "/file/export", method = RequestMethod.GET)
-    public void fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
+    public BaseResponse fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
         fileService.export(tableName, response);
+        return BaseResponse.ResponseFacory.success(null);
     }
 }

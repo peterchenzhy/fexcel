@@ -34,6 +34,10 @@ public class FileService {
     @Autowired
     private DBTableService dbTableService;
 
+    @Autowired
+    private ExcelRead excelRead;
+
+
     /**
      * 读文件
      *
@@ -46,7 +50,7 @@ public class FileService {
      */
     public List<ArrayList<String>> readExcel(MultipartFile file, Integer startRow) {
         try {
-            return new ExcelRead().readExcel(file, startRow);
+            return excelRead.readExcel(file, startRow);
         } catch (IOException e) {
             e.printStackTrace();
             log.error(e.getCause().getMessage());

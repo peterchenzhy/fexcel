@@ -4,11 +4,11 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,9 +25,13 @@ import java.util.List;
  * @Description ExcelRead
  * @since 2019-04-04 10:48
  */
+@Component
 public class ExcelRead {
-    public int totalRows; //sheet中总行数
-    public static int totalCells = 0; //每一行总单元格数
+//    public int totalRows; //sheet中总行数
+//    public int totalCells ; //每一行总单元格数
+
+    private static ThreadLocal<Integer> totalCells = ThreadLocal.withInitial(() -> 0);
+    private static ThreadLocal<Integer> totalRows = ThreadLocal.withInitial(() -> 0);
 
     /**
      * read the Excel .xlsx,.xls
@@ -84,16 +88,16 @@ public class ExcelRead {
                 if (xssfSheet == null) {
                     continue;
                 }
-                totalRows = xssfSheet.getLastRowNum();
+                totalRows.set(xssfSheet.getLastRowNum());
                 //读取Row,从第二行开始
-                for (int rowNum = startRow; rowNum <= totalRows; rowNum++) {
+                for (int rowNum = startRow; rowNum <= totalRows.get(); rowNum++) {
                     XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                     if (xssfRow != null) {
-                        if (totalCells == 0) {
-                            totalCells = xssfRow.getLastCellNum();
+                        if (totalCells.get() == 0) {
+                            totalCells.set((int) xssfRow.getLastCellNum());
                         }
                         rowList = new ArrayList<String>();
-                        for (int c = 0; c < totalCells; c++) {
+                        for (int c = 0; c < totalCells.get(); c++) {
                             XSSFCell cell = xssfRow.getCell(c);
                             if (cell == null) {
                                 rowList.add(ExcelUtil.EMPTY);
@@ -150,17 +154,17 @@ public class ExcelRead {
                 if (hssfSheet == null) {
                     continue;
                 }
-                totalRows = hssfSheet.getLastRowNum();
+                totalRows.set(hssfSheet.getLastRowNum());
                 //读取Row,从第二行开始
-                for (int rowNum =startRow ; rowNum <= totalRows; rowNum++) {
+                for (int rowNum = startRow; rowNum <= totalRows.get(); rowNum++) {
                     HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                     if (hssfRow != null) {
                         rowList = new ArrayList<String>();
-                        if (totalCells == 0) {
-                            totalCells = hssfRow.getLastCellNum();
+                        if (totalCells.get() == 0) {
+                            totalCells.set((int) hssfRow.getLastCellNum());
                         }
                         //读取列，从第一列开始
-                        for (short c = 0; c < totalCells; c++) {
+                        for (short c = 0; c < totalCells.get(); c++) {
                             HSSFCell cell = hssfRow.getCell(c);
                             if (cell == null) {
                                 rowList.add(ExcelUtil.EMPTY);

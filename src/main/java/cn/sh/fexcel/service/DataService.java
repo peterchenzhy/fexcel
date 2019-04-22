@@ -3,7 +3,8 @@ package cn.sh.fexcel.service;
 import cn.sh.fexcel.Util.TableSqlGenatorUtil;
 import cn.sh.fexcel.Util.commons;
 import cn.sh.fexcel.model.DataQueryPo;
-import cn.sh.fexcel.model.DataResponsePo;
+import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @since 2019-04-06 19:23
  */
 @Service
+@Slf4j
 public class DataService {
 
     @Autowired
@@ -69,29 +71,36 @@ public class DataService {
         return true;
     }
 
-    public DataResponsePo queryData(DataQueryPo query) {
-        DataResponsePo result = new DataResponsePo();
+    public PageInfo queryData(DataQueryPo dataQueryPo) {
         try {
-            if (query == null || StringUtils.isEmpty(query.getTableName())) {
-                return result;
+            if (dataQueryPo == null || StringUtils.isEmpty(dataQueryPo.getTableName())) {
+                return null;
             }
 
-            if (query.getPageNo() <= 0) {
-                query.setPageNo(commons.PAGE_NO);
-        }
+            if (dataQueryPo.getPageNo() <= 0) {
+                dataQueryPo.setPageNo(commons.PAGE_NO);
+            }
 
-            if (query.getPageSize() <= 0) {
-                query.setPageSize(commons.PAGE_SIZE);
-    }
-            String clause = buildWhereClause(query.getCondition());
-            Map<String, Object> countMap = jdbcTemplate.queryForMap(TableSqlGenatorUtil.getDataCount(query.getTableName(), clause));
-            List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.querySearchTable(query.getTableName(), clause, query.getPageNo(), query.getPageSize()));
+            if (dataQueryPo.getPageSize() <= 0) {
+                dataQueryPo.setPageSize(commons.PAGE_SIZE);
+            }
+            String clause = buildWhereClause(dataQueryPo.getCondition());
+            Map<String, Object> countMap = jdbcTemplate.queryForMap(TableSqlGenatorUtil.getDataCount(dataQueryPo.getTableName(), clause));
+            List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.querySearchTable(dataQueryPo.getTableName(), clause, dataQueryPo.getPageNo(), dataQueryPo.getPageSize()));
 
-            result.setTotalCount((long) countMap.get("count"));
-            result.setData(poMap);
+            PageInfo pageInfo = new PageInfo();
+            pageInfo.setPageSize(dataQueryPo.getPageSize());
+            pageInfo.setPageNum(dataQueryPo.getPageNo());
+            pageInfo.setTotal((long) countMap.get("count"));
+            pageInfo.setPages((int) (pageInfo.getTotal() % dataQueryPo.getPageSize() == 0 ?
+                    pageInfo.getTotal() / dataQueryPo.getPageSize()
+                    : pageInfo.getTotal() / dataQueryPo.getPageSize() + 1));
+            pageInfo.setSize(poMap.size());
+            pageInfo.setList(poMap);
+            return pageInfo;
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+           log.error(ex.getCause().getMessage());
         }
-        return result;
+        return null;
     }
 }

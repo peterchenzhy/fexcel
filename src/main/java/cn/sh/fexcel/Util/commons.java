@@ -42,6 +42,9 @@ public class commons {
 
     public static final int BATCH_500 = 500;
 
+    public static final String SUCCESS_MSG = "处理成功！";
+    public static final String FAIL_MSG = "处理失败！";
+
 
 
 
