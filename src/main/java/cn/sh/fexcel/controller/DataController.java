@@ -22,7 +22,7 @@ import java.util.Map;
  * @since 2019-04-06 19:22
  */
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials="true",origins = "*", maxAge = 3600)
 public class DataController {
 
     @Autowired
@@ -37,14 +37,10 @@ public class DataController {
         }
     }
 
-    @RequestMapping(value = "/queryData", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryData", method = RequestMethod.POST)
     public BaseResponse queryData(@RequestBody DataQueryPo query) {
         return BaseResponse.ResponseFacory.success(dataService.queryData(query));
     }
-
-
-
-
 
     public static void main(String... aa) {
         Map<String, String> map = new HashMap<>();
