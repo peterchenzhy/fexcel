@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @since 2019-04-04 10:14
  */
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials="true",origins = "*", maxAge = 3600)
 public class FileController {
 
     @Autowired
