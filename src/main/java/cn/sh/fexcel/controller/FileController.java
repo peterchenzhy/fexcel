@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @since 2019-04-04 10:14
  */
 @RestController
-@CrossOrigin(allowCredentials="true",origins = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true", origins = "*", maxAge = 3600)
 public class FileController {
 
     @Autowired
@@ -85,6 +85,6 @@ public class FileController {
     @RequestMapping(value = "/file/export", method = RequestMethod.GET)
     public BaseResponse fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
         boolean result = fileService.export(tableName, response);
-        return result?BaseResponse.ResponseFacory.success(null):BaseResponse.ResponseFacory.fail("导出失败！");
+        return result ? BaseResponse.ResponseFacory.success(null) : BaseResponse.ResponseFacory.fail("导出失败！");
     }
 }

@@ -22,7 +22,7 @@ import java.util.Map;
  * @since 2019-04-06 19:22
  */
 @RestController
-@CrossOrigin(allowCredentials="true",origins = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true", origins = "*", maxAge = 3600)
 public class DataController {
 
     @Autowired

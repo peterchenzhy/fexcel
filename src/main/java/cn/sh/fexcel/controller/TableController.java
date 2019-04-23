@@ -18,7 +18,7 @@ import java.util.List;
  * @since 2019-04-21 14:09
  */
 @RestController
-@CrossOrigin(allowCredentials="true",origins = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true", origins = "*", maxAge = 3600)
 public class TableController {
 
     @Autowired
