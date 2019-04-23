@@ -6,6 +6,7 @@ import cn.sh.fexcel.model.ExcelTableCollumPo;
 import cn.sh.fexcel.model.ExcelTablePo;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.analysis.function.Exp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -79,13 +80,18 @@ public class DBTableService {
      * @version v1
      * @since 2019/4/6 13:39
      */
-    public void batchInsertData(String fileName, List<ArrayList<String>> data, List<String> headers) {
-        List<String> sqls = TableSqlGenatorUtil.insertSQL(fileName, data, headers);
-        List<List<String>> partList = Lists.partition(sqls, commons.BATCH_500);
-        partList.stream().forEach(list -> {
-            jdbcTemplate.batchUpdate(list.toArray(new String[]{}));
-        });
-
+    public boolean batchInsertData(String fileName, List<ArrayList<String>> data, List<String> headers) {
+        try {
+            List<String> sqls = TableSqlGenatorUtil.insertSQL(fileName, data, headers);
+            List<List<String>> partList = Lists.partition(sqls, commons.BATCH_500);
+            partList.stream().forEach(list -> {
+                jdbcTemplate.batchUpdate(list.toArray(new String[]{}));
+            });
+            return true;
+        } catch (Exception e) {
+            log.error(e.getCause().getMessage());
+            return false;
+        }
     }
 
     /**

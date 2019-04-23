@@ -46,6 +46,7 @@ public class FileController {
         if (file == null) {
             BaseResponse.ResponseFacory.fail("上传的文件为空！");
         }
+        boolean result = true;
         //文件名
         String fileName = ExcelUtil.fileName(file.getOriginalFilename().trim(), false, true);
         String tableName = ExcelUtil.fileName(file.getOriginalFilename().trim(), true, true);
@@ -56,7 +57,7 @@ public class FileController {
             List<ExcelTableCollumPo> collumList = dbTableService.getExcelTableHeaders(tableName);
             List<String> tableHeader = collumList.stream().map(ExcelTableCollumPo::getTableCollumName).collect(Collectors.toList());
             int startRow = dbTableService.getDataCount(tableName);
-            dbTableService.batchInsertData(tableName, fileService.readExcel(file, startRow + 1), tableHeader);
+            result = result && dbTableService.batchInsertData(tableName, fileService.readExcel(file, startRow + 1), tableHeader);
         } else {
             //生成数据库列名
             List<String> tableHeader = new ArrayList<>(excelHeader.size());
@@ -64,12 +65,12 @@ public class FileController {
                 tableHeader.add("c" + i);
             }
             //建表
-            if (dbTableService.createTable(tableName, tableHeader, excelHeader, fileName)) {
-                //插入数据
-                dbTableService.batchInsertData(tableName, fileService.readExcel(file, 1), tableHeader);
-            }
+            result = result && dbTableService.createTable(tableName, tableHeader, excelHeader, fileName);
+            //插入数据
+            result = result && dbTableService.batchInsertData(tableName, fileService.readExcel(file, 1), tableHeader);
+
         }
-        return BaseResponse.ResponseFacory.success(null);
+        return result ? BaseResponse.ResponseFacory.success(null) : BaseResponse.ResponseFacory.fail("文件上传失败！");
     }
 
     /**
@@ -83,7 +84,7 @@ public class FileController {
      */
     @RequestMapping(value = "/file/export", method = RequestMethod.GET)
     public BaseResponse fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
-        fileService.export(tableName, response);
-        return BaseResponse.ResponseFacory.success(null);
+        boolean result = fileService.export(tableName, response);
+        return result?BaseResponse.ResponseFacory.success(null):BaseResponse.ResponseFacory.fail("导出失败！");
     }
 }

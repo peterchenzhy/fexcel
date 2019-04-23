@@ -63,12 +63,16 @@ public class DataService {
      * @since 2019/4/21 16:02
      */
     public boolean batchCommit(String tableName, List<Map<String, String>> data) {
-
-        List<String> queryStringList = new ArrayList<>(data.size());
-        for (Map<String, String> e : data) {
-            jdbcTemplate.update(TableSqlGenatorUtil.updateData(tableName, e));
+        try {
+            List<String> queryStringList = new ArrayList<>(data.size());
+            for (Map<String, String> e : data) {
+                jdbcTemplate.update(TableSqlGenatorUtil.updateData(tableName, e));
+            }
+            return true;
+        } catch (Exception e) {
+            log.error(e.getCause().getMessage());
+            return false;
         }
-        return true;
     }
 
     public PageInfo queryData(DataQueryPo dataQueryPo) {
@@ -99,7 +103,7 @@ public class DataService {
             pageInfo.setList(poMap);
             return pageInfo;
         } catch (Exception ex) {
-           log.error(ex.getCause().getMessage());
+            log.error(ex.getCause().getMessage());
         }
         return null;
     }

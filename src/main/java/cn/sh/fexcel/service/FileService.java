@@ -81,12 +81,12 @@ public class FileService {
      * @version v1
      * @since 2019/4/21 11:10
      */
-    public void export(String tableName, HttpServletResponse response) {
+    public boolean export(String tableName, HttpServletResponse response) {
 
-        List<ExcelTablePo> table = dbTableService.getExcelTable(tableName) ;
-        if (table==null||table.isEmpty()) {
+        List<ExcelTablePo> table = dbTableService.getExcelTable(tableName);
+        if (table == null || table.isEmpty()) {
             log.warn("数据表不存在 {}", tableName);
-            return;
+            return false;
         }
         List<Map<String, Object>> mapList = dataService.queryExportData(tableName);
         if (mapList != null && !mapList.isEmpty()) {
@@ -98,12 +98,14 @@ public class FileService {
                         + new String((table.get(0).getExcelName() + ".xlsx").getBytes("GB2312"), "ISO-8859-1"));
                 response.flushBuffer();
                 workbook.write(response.getOutputStream());
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
+                log.error(e.getCause().getMessage());
             }
         } else {
             log.info("数据表{}没有数据。", table.get(0).getExcelName());
         }
-
+        return false;
     }
 }
