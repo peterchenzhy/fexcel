@@ -83,37 +83,40 @@ public class ExcelRead {
             // 创建文档
             wb = new XSSFWorkbook(input);
             //读取sheet(页)
-            for (int numSheet = 0; numSheet < wb.getNumberOfSheets(); numSheet++) {
-                XSSFSheet xssfSheet = wb.getSheetAt(numSheet);
-                if (xssfSheet == null) {
-                    continue;
+            //for (int numSheet = 0; numSheet < wb.getNumberOfSheets(); numSheet++) {//暂时注释，只读取第一个sheet
+            int numSheet = 0;
+            XSSFSheet xssfSheet = wb.getSheetAt(numSheet);
+            if (xssfSheet == null) {
+                //continue;
+                return null;
+            }
+            totalRows.set(xssfSheet.getLastRowNum());
+            //读取Row,从第二行开始
+            for (int rowNum = startRow; rowNum <= totalRows.get(); rowNum++) {
+                XSSFRow xssfRow = xssfSheet.getRow(rowNum);
+                if (xssfRow != null) {
+                    if (totalCells.get() == 0) {
+                        totalCells.set((int) xssfRow.getLastCellNum());
+                    }
+                    rowList = new ArrayList<String>();
+                    for (int c = 0; c < totalCells.get(); c++) {
+                        XSSFCell cell = xssfRow.getCell(c);
+                        if (cell == null) {
+                            rowList.add(ExcelUtil.EMPTY);
+                            continue;
+                        }
+                        rowList.add(ExcelUtil.getXValue(cell).trim());
+                    }
+                    list.add(rowList);
                 }
-                totalRows.set(xssfSheet.getLastRowNum());
-                //读取Row,从第二行开始
-                for (int rowNum = startRow; rowNum <= totalRows.get(); rowNum++) {
-                    XSSFRow xssfRow = xssfSheet.getRow(rowNum);
-                    if (xssfRow != null) {
-                        if (totalCells.get() == 0) {
-                            totalCells.set((int) xssfRow.getLastCellNum());
-                        }
-                        rowList = new ArrayList<String>();
-                        for (int c = 0; c < totalCells.get(); c++) {
-                            XSSFCell cell = xssfRow.getCell(c);
-                            if (cell == null) {
-                                rowList.add(ExcelUtil.EMPTY);
-                                continue;
-                            }
-                            rowList.add(ExcelUtil.getXValue(cell).trim());
-                        }
-                        list.add(rowList);
-                    }
-                    if (startRow == 0) {
-                        break;
-                    }
+                if (startRow == 0) {
+                    break;
                 }
             }
+            //}
             return list;
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -149,36 +152,38 @@ public class ExcelRead {
             // 创建文档
             wb = new HSSFWorkbook(input);
             //读取sheet(页)
-            for (int numSheet = 0; numSheet < wb.getNumberOfSheets(); numSheet++) {
-                HSSFSheet hssfSheet = wb.getSheetAt(numSheet);
-                if (hssfSheet == null) {
-                    continue;
+            //for (int numSheet = 0; numSheet < wb.getNumberOfSheets(); numSheet++) {//暂时注释，只读取第一个sheet
+            int numSheet = 0;
+            HSSFSheet hssfSheet = wb.getSheetAt(numSheet);
+            if (hssfSheet == null) {
+                //continue;
+                return null;
+            }
+            totalRows.set(hssfSheet.getLastRowNum());
+            //读取Row,从第二行开始
+            for (int rowNum = startRow; rowNum <= totalRows.get(); rowNum++) {
+                HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                if (hssfRow != null) {
+                    rowList = new ArrayList<String>();
+                    if (totalCells.get() == 0) {
+                        totalCells.set((int) hssfRow.getLastCellNum());
+                    }
+                    //读取列，从第一列开始
+                    for (short c = 0; c < totalCells.get(); c++) {
+                        HSSFCell cell = hssfRow.getCell(c);
+                        if (cell == null) {
+                            rowList.add(ExcelUtil.EMPTY);
+                            continue;
+                        }
+                        rowList.add(ExcelUtil.getHValue(cell).trim());
+                    }
+                    list.add(rowList);
                 }
-                totalRows.set(hssfSheet.getLastRowNum());
-                //读取Row,从第二行开始
-                for (int rowNum = startRow; rowNum <= totalRows.get(); rowNum++) {
-                    HSSFRow hssfRow = hssfSheet.getRow(rowNum);
-                    if (hssfRow != null) {
-                        rowList = new ArrayList<String>();
-                        if (totalCells.get() == 0) {
-                            totalCells.set((int) hssfRow.getLastCellNum());
-                        }
-                        //读取列，从第一列开始
-                        for (short c = 0; c < totalCells.get(); c++) {
-                            HSSFCell cell = hssfRow.getCell(c);
-                            if (cell == null) {
-                                rowList.add(ExcelUtil.EMPTY);
-                                continue;
-                            }
-                            rowList.add(ExcelUtil.getHValue(cell).trim());
-                        }
-                        list.add(rowList);
-                    }
-                    if (startRow == 0) {
-                        break;
-                    }
+                if (startRow == 0) {
+                    break;
                 }
             }
+            //}
             return list;
         } catch (IOException e) {
             e.printStackTrace();
