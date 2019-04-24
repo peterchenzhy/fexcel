@@ -74,5 +74,17 @@ public class DataController {
         });
 
 
+
+        Map<String, String> mapxx = new HashMap<>();
+        mapxx.put("c0","1");
+        mapxx.put("c1","1");
+        DataQueryPo po = new DataQueryPo();
+        po.setTableName("extractedon1203eacsamplefollowupbyskulevelforps1");
+        po.setCondition(mapxx);
+        po.setPageNo(1);
+        po.setPageSize(20);
+        String resul1t = JSON.toJSONString(po);
+        System.out.println(resul1t);
+
     }
 }

@@ -83,8 +83,7 @@ public class FileController {
      * @since 2019/4/6 17:51
      */
     @RequestMapping(value = "/file/export", method = RequestMethod.GET)
-    public BaseResponse fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
-        boolean result = fileService.export(tableName, response);
-        return result ? BaseResponse.ResponseFacory.success(null) : BaseResponse.ResponseFacory.fail("导出失败！");
+    public void fileUpload(@RequestParam(value = "tableName") String tableName, HttpServletResponse response) {
+        fileService.export(tableName, response);
     }
 }

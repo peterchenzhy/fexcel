@@ -81,24 +81,25 @@ public class FileService {
      * @version v1
      * @since 2019/4/21 11:10
      */
-    public boolean export(String tableName, HttpServletResponse response) {
+    public void export(String tableName, HttpServletResponse response) {
 
         List<ExcelTablePo> table = dbTableService.getExcelTable(tableName);
         if (table == null || table.isEmpty()) {
-            log.warn("数据表不存在 {}", tableName);
-            return false;
+            log.error("数据表不存在 {}", tableName);
+            return ;
         }
         List<Map<String, Object>> mapList = dataService.queryExportData(tableName);
         if (mapList != null && !mapList.isEmpty()) {
             List<ExcelTableCollumPo> headers = dbTableService.getExcelTableHeaders(tableName);
             Workbook workbook = ExcelWrite.write(headers, mapList);
+            log.info("文件{}开始下载",table.get(0).getExcelName());
             try {
                 response.setContentType("application/octet-stream");
                 response.setHeader("Content-Disposition", "attachment;fileName="
                         + new String((table.get(0).getExcelName() + ".xlsx").getBytes("GB2312"), "ISO-8859-1"));
                 response.flushBuffer();
                 workbook.write(response.getOutputStream());
-                return true;
+                log.info("文件{}下载完成",table.get(0).getExcelName());
             } catch (IOException e) {
                 e.printStackTrace();
                 log.error(e.getCause().getMessage());
@@ -106,6 +107,5 @@ public class FileService {
         } else {
             log.info("数据表{}没有数据。", table.get(0).getExcelName());
         }
-        return false;
     }
 }
