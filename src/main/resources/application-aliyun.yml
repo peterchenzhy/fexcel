@@ -64,4 +64,4 @@ logging:
     org.springframework: info
     cn.czy.nmtjy.mapper: debug
     org.springframework.security: debug
-  file: ./fexcelLog/fexcleLog.log
+  file: ./fexcelLog/log.log

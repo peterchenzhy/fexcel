@@ -18,7 +18,6 @@ spring:
     multipart:
       max-request-size: 50MB
       max-file-size: 20MB
-
 #tomcat
 server:
   tomcat:
@@ -27,9 +26,9 @@ server:
     accesslog:
       enabled: true
   servlet:
-    context-path: /fexcel-server
+    context-path: /
+#    context-path: /fexcel-server
   port: 8112
-
 #mybatis
 #mybatis:
 #  type-aliases-package: cn.czy.nmtjy.model.po
