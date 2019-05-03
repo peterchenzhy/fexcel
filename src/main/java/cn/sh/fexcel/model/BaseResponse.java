@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -13,7 +12,7 @@ import java.util.List;
  *
  * @author PeterChen
  * @summary BaseResponse
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) 2019, PeterChen.
  * @Description BaseResponse
  * @since 2019-04-22 21:10
  */
@@ -44,8 +43,8 @@ public class BaseResponse<T> {
         }
 
         public static BaseResponse fail(String message) {
-            if(message==null){
-                message= commons.TAB;
+            if (message == null) {
+                message = commons.TAB;
             }
             BaseResponse response = new BaseResponse();
             response.setSuccess(false);

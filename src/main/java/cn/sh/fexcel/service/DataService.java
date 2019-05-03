@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,21 +35,7 @@ public class DataService {
     @Autowired
     private DBTableService dbTableService;
 
-    private String buildWhereClause(Map<String, String> conditions) {
-        StringBuilder sb = new StringBuilder();
-        if (conditions != null && conditions.size() > 0) {
-            sb.append("where ");
-            for (String key : conditions.keySet()) {
-                String condition = String.format("%s like '%%%s%%'", key, conditions.get(key));
-                sb.append(condition).append(" and ");
-            }
-        }
-        String clause = sb.toString();
-        if (clause.endsWith(" and ")) {
-            clause = clause.substring(0, clause.length() - 5);
-        }
-        return clause;
-    }
+
 
     public List<Map<String, Object>> queryExportData(String tablename) {
         List<Map<String, Object>> mapList = dbTableService.queryExportData(tablename);
@@ -91,7 +76,7 @@ public class DataService {
             if (dataQueryPo.getPageSize() <= 0) {
                 dataQueryPo.setPageSize(commons.PAGE_SIZE);
             }
-            String clause = buildWhereClause(dataQueryPo.getCondition());
+            String clause = TableSqlGenatorUtil.buildWhereClause(dataQueryPo.getCondition());
             Map<String, Object> countMap = jdbcTemplate.queryForMap(TableSqlGenatorUtil.getDataCount(dataQueryPo.getTableName(), clause));
             List<Map<String, Object>> poMap = jdbcTemplate.queryForList(TableSqlGenatorUtil.querySearchTable(dataQueryPo.getTableName(),
                     clause, dataQueryPo.getPageNo(), dataQueryPo.getPageSize()));

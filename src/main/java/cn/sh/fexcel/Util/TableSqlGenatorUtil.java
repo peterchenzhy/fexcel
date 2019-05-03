@@ -1,5 +1,7 @@
 package cn.sh.fexcel.Util;
 
+import cn.sh.fexcel.model.CollumManager;
+import cn.sh.fexcel.model.CollumProperty;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +10,6 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static cn.sh.fexcel.Util.commons.*;
 
@@ -45,7 +46,7 @@ public class TableSqlGenatorUtil {
 
     public static String dropTable(String tableName) {
         if (StringUtils.isEmpty(tableName)) {
-            log.warn("传入的数据为空，无法生成table");
+            log.warn("传入的数据为空，无法删除table");
             return "";
         }
         StringBuffer stringBuffer = new StringBuffer("drop table").append(TAB).append(tableName);
@@ -146,12 +147,23 @@ public class TableSqlGenatorUtil {
         return String.format(QUERY_SEARCH_TABLE_WITH_CONDITIONS_TEMPLATE, tableName, clause, startIndex, endIndex);
     }
 
+    public static String querySearchTableHeader(String tableName, String clause, int pageNo, int pageSize) {
+        int startIndex = (pageNo - 1) * pageSize;
+        int endIndex = startIndex + pageSize;
+        return String.format(QUERY_SEARCH_TABLE_HEADER_WITH_CONDITIONS_TEMPLATE, tableName, clause, startIndex, endIndex);
+    }
+
+
     public static String getDataCount(String tableName) {
         return String.format(GET_DATA_COUNT_TEMPLATE, tableName);
     }
 
     public static String getDataCount(String tableName, String conditions) {
         return String.format(GET_DATA_COUNT_WITH_CONDITIONS_TEMPLATE, tableName, conditions);
+    }
+
+    public static String getDataHeaderCount(String tableName, String conditions) {
+        return String.format(GET_DATA_HEADER_COUNT_WITH_CONDITIONS_TEMPLATE, tableName, conditions);
     }
 
     //update %s set %s where id = %s
@@ -169,5 +181,43 @@ public class TableSqlGenatorUtil {
         }
         sb.deleteCharAt(sb.length() - 1);
         return String.format(BATCH_UPDATE_DATA, tableName, sb.toString(), id);
+    }
+
+    public static String buildWhereClause(Map<String, String> conditions, String tableAlias) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("where 1=1 ");
+        if (conditions != null && conditions.size() > 0) {
+            for (String key : conditions.keySet()) {
+                sb.append(" and ");
+                String condition = String.format("tableAlias.%s like '%%%s%%'", key, conditions.get(key));
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String buildWhereClause(Map<String, String> conditions) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("where 1=1 ");
+        if (conditions != null && conditions.size() > 0) {
+            for (String key : conditions.keySet()) {
+                sb.append(" and ");
+                String condition = String.format("%s like '%%%s%%'", key, conditions.get(key));
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String deleteTableCollum(String tableName) {
+        return String.format(DELETE_TABLE_COLLUM_TEMPLATE, tableName);
+    }
+
+    public static List<String> updateTableCollumProperty(CollumManager collumManager) {
+        String tableName = collumManager.getTableName();
+        List<CollumProperty> data = collumManager.getList();
+        List sqls = new ArrayList(data.size());
+        data.stream().forEach(e -> {
+            sqls.add(String.format(UPDATE_TABLE_COLLUM_PROPERTY_TEMPLATE, e.getValue()[0], e.getValue()[1], e.getValue()[2], tableName, e.getId()));
+        });
+        return sqls;
     }
 }
