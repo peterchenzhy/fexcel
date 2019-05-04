@@ -201,7 +201,7 @@ public class TableSqlGenatorUtil {
         if (conditions != null && conditions.size() > 0) {
             for (String key : conditions.keySet()) {
                 sb.append(" and ");
-                String condition = String.format("%s like '%%%s%%'", key, conditions.get(key));
+                sb.append(String.format("%s like '%%%s%%'", key, conditions.get(key)));
             }
         }
         return sb.toString();

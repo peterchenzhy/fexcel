@@ -3,7 +3,6 @@ package cn.sh.fexcel.model;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * CollumManager

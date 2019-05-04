@@ -41,7 +41,7 @@ public class commons {
     public final static String GET_DATA_HEADER_COUNT_WITH_CONDITIONS_TEMPLATE = "select count(etc.id) as count from excel_table_collum etc, excel_table et " +
             "%2$s and  et.table_name ='%1$s' and etc.status =1 and etc.table_id = et.id  ";
 
-    public final static String DELETE_TABLE_COLLUM_TEMPLATE = "delete from excel_table_collum etc ,excel_table et  " +
+    public final static String DELETE_TABLE_COLLUM_TEMPLATE = "delete etc from excel_table_collum etc ,excel_table et  " +
             "where etc.table_id = et.id and et.table_name = '%s' ";
 
     public final static String UPDATE_TABLE_COLLUM_PROPERTY_TEMPLATE = "update excel_table_collum etc , excel_table et set etc.can_search = %s ,can_edit = %s ,can_view = %s " +
