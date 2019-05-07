@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.sh</groupId>
     <artifactId>fexcel</artifactId>
-    <version>9.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>fexcel</name>
     <description>Demo project for Spring Boot</description>
 

@@ -143,13 +143,13 @@ public class TableSqlGenatorUtil {
 
     public static String querySearchTable(String tableName, String clause, int pageNo, int pageSize) {
         int startIndex = (pageNo - 1) * pageSize;
-        int endIndex = startIndex + pageSize;
+        int endIndex = pageSize;
         return String.format(QUERY_SEARCH_TABLE_WITH_CONDITIONS_TEMPLATE, tableName, clause, startIndex, endIndex);
     }
 
     public static String querySearchTableHeader(String tableName, String clause, int pageNo, int pageSize) {
         int startIndex = (pageNo - 1) * pageSize;
-        int endIndex = startIndex + pageSize;
+        int endIndex = pageSize;
         return String.format(QUERY_SEARCH_TABLE_HEADER_WITH_CONDITIONS_TEMPLATE, tableName, clause, startIndex, endIndex);
     }
 
