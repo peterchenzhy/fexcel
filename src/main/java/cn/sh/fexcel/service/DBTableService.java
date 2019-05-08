@@ -106,6 +106,7 @@ public class DBTableService {
     public boolean checkTableExist(String tableName) {
         List<ExcelTablePo> list = this.getExcelTable(tableName);
         if (list != null && list.size() > 0) {
+            log.info("table {} 已经存在" ,tableName);
             return true;
         }
         return false;

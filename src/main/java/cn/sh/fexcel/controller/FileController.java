@@ -5,6 +5,7 @@ import cn.sh.fexcel.model.BaseResponse;
 import cn.sh.fexcel.model.ExcelTableCollumPo;
 import cn.sh.fexcel.service.DBTableService;
 import cn.sh.fexcel.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @CrossOrigin(allowCredentials = "true", origins = "*", maxAge = 3600)
+@Slf4j
 public class FileController {
 
     @Autowired
@@ -57,6 +59,7 @@ public class FileController {
             List<ExcelTableCollumPo> collumList = dbTableService.getExcelTableHeaders(tableName);
             List<String> tableHeader = collumList.stream().map(ExcelTableCollumPo::getTableCollumName).collect(Collectors.toList());
             int startRow = dbTableService.getDataCount(tableName);
+            log.info("table {} 已经存在，将从第 {} 行开始读取数据", tableName, startRow + 1);
             result = result && dbTableService.batchInsertData(tableName, fileService.readExcel(file, startRow + 1), tableHeader);
         } else {
             //生成数据库列名
