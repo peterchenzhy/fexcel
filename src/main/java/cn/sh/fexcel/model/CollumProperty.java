@@ -7,7 +7,7 @@ import lombok.Data;
  *
  * @author PeterChen
  * @summary CollumProperty
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) 2019, PeterChen Rights Reserved.
  * @Description CollumProperty
  * @since 2019-05-03 14:31
  */
