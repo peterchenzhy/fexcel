@@ -12,9 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * FileService 文件操作service
@@ -86,23 +88,40 @@ public class FileService {
         List<ExcelTablePo> table = dbTableService.getExcelTable(tableName);
         if (table == null || table.isEmpty()) {
             log.error("数据表不存在 {}", tableName);
-            return ;
+            return;
         }
         List<Map<String, Object>> mapList = dataService.queryExportData(tableName);
         if (mapList != null && !mapList.isEmpty()) {
             List<ExcelTableCollumPo> headers = dbTableService.getExcelTableHeaders(tableName);
             Workbook workbook = ExcelWrite.write(headers, mapList);
-            log.info("文件{}开始下载",table.get(0).getExcelName());
+            OutputStream os=null;
+            log.info("文件{}开始下载", table.get(0).getExcelName());
             try {
                 response.setContentType("application/octet-stream");
                 response.setHeader("Content-Disposition", "attachment;fileName="
                         + new String((table.get(0).getExcelName() + ".xlsx").getBytes("GB2312"), "ISO-8859-1"));
                 response.flushBuffer();
-                workbook.write(response.getOutputStream());
-                log.info("文件{}下载完成",table.get(0).getExcelName());
+                os = response.getOutputStream();
+                workbook.write(os);
+                log.info("文件{}下载完成", table.get(0).getExcelName());
             } catch (IOException e) {
                 e.printStackTrace();
                 log.error(e.getCause().getMessage());
+            } finally {
+                if (Objects.nonNull(workbook)) {
+                    try {
+                        workbook.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Objects.nonNull(os)){
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } else {
             log.info("数据表{}没有数据。", table.get(0).getExcelName());

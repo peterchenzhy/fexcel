@@ -5,11 +5,12 @@ spring:
       active: develop
 
   datasource:
-    url: jdbc:mysql://47.100.242.85:6670/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&allowMultiQueries=true
+#    url: jdbc:mysql://47.103.66.247:6670/fexcel?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&allowMultiQueries=true
+    url: jdbc:mysql://localhost:6670/fexcel?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&allowMultiQueries=true
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
-    password: czy1377449!
+    password: fexcelDB123#
     initialSize: 1
     minIdle: 3
     maxActive: 20
