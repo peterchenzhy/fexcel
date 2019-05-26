@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author PeterChen
  * @summary ExcelTablePo
- * @Copyright (c) 2019, Lianjia Group All Rights Reserved.
+ * @Copyright (c) PeterChen
  * @Description ExcelTablePo
  * @since 2019-04-06 15:25
  */
@@ -27,11 +27,17 @@ public class ExcelTablePo {
 
     private Integer status;
 
+    private Date updateTime ;
+
+    private String excelName;
+
     public static ExcelTablePo map2po(Map<String, Object> map) {
         ExcelTablePo po = new ExcelTablePo();
         po.setId((Long) map.get("id"));
         po.setTableName((String) map.get("table_name"));
+        po.setExcelName((String) map.get("excel_name"));
         po.setCreateTime((Date) map.get("create_time"));
+        po.setUpdateTime((Date) map.get("update_time"));;
         po.setStatus((Integer) map.get("status"));
         return po;
     }

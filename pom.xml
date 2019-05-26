@@ -69,6 +69,31 @@
             <artifactId>guava</artifactId>
             <version>27.1-jre</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.57</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.8</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -77,6 +102,42 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>com.github.eirslett</groupId>-->
+                <!--<artifactId>frontend-maven-plugin</artifactId>-->
+                <!--<version>1.6</version>-->
+                <!--<configuration>-->
+                    <!--<installDirectory>d:\\nodejs</installDirectory>-->
+                    <!--<workingDirectory>src/main/resources/public</workingDirectory>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>install node and npm</id>-->
+                        <!--<goals>-->
+                            <!--<goal>install-node-and-npm</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<nodeVersion>v10.11.0</nodeVersion>-->
+                            <!--<npmVersion>6.4.1</npmVersion>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>npm install</id>-->
+                        <!--<goals>-->
+                            <!--<goal>npm</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<arguments>install</arguments>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>webpack build</id>-->
+                        <!--<goals>-->
+                            <!--<goal>webpack</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

@@ -14,7 +14,10 @@ spring:
     minIdle: 3
     maxActive: 20
     maxWait: 60000
-
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 20MB
 #tomcat
 server:
   tomcat:
@@ -23,9 +26,9 @@ server:
     accesslog:
       enabled: true
   servlet:
-    context-path: /fexcel-server
+    context-path: /
+#    context-path: /fexcel-server
   port: 8112
-
 #mybatis
 #mybatis:
 #  type-aliases-package: cn.czy.nmtjy.model.po
@@ -60,3 +63,4 @@ logging:
     org.springframework: info
     cn.czy.nmtjy.mapper: debug
     org.springframework.security: debug
+  file: ./fexcelLog/log.log
